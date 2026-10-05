@@ -1,0 +1,45 @@
+import 'package:flutter/material.dart';
+
+// Colores de la marca. Se usan así: AppColors.primary
+class AppColors {
+  AppColors._(); // Evita crear instancias, solo se usan sus constantes
+
+  static const primary = Color(0xFFFF6600);     // Naranja principal
+  static const textPrimary = Color(0xFF1C1B1F); // Texto principal
+  static const border = Color(0xFF79747E);      // Borde de los campos
+  static const error = Color(0xFFE53935);       // Mensajes de error
+}
+
+// Tema global de la app. Se aplica en MaterialApp (main.dart).
+class AppTheme {
+  AppTheme._();
+
+  static ThemeData get light => ThemeData(
+        useMaterial3: true,
+
+        // Paleta general generada a partir del naranja de la marca
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+        ),
+
+        // Fondo de todas las pantallas
+        scaffoldBackgroundColor: Colors.white,
+
+        // Estilo de los FilledButton (Botón naranja redondeado)
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            minimumSize: const Size.fromHeight(60), // alto del botón
+            shape: const StadiumBorder(), // bordes totalmente redondeados
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+        ),
+
+        // Estilo de los TextButton (ej: "Olvidé mi contraseña")
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(foregroundColor: AppColors.textPrimary),
+        ),
+      );
+}
