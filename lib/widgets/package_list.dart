@@ -7,12 +7,16 @@ import 'package_card.dart';
 // Lista de guías reutilizable: la usan las tres pestañas del Home.
 class PackageList extends StatelessWidget {
   final List<PackageModel> packages;
-  final bool showDateHeader; // true = muestra "Hoy - fecha" y el filtro arriba
+  final String statusLabel; // estado en singular, ej: "recogida" (para el contador)
+  final bool showDateHeader; // true = muestra además la fecha y el filtro
+  final Widget? header; // encabezado propio (ancho completo). Si se da, reemplaza al normal
 
   const PackageList({
     super.key,
     required this.packages,
+    required this.statusLabel,
     this.showDateHeader = false,
+    this.header,
   });
 
   static const _months = [
@@ -20,54 +24,109 @@ class PackageList extends StatelessWidget {
     'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
   ];
 
-  // Texto del encabezado, ej: "Hoy - 5 Oct 2026"
+  // Texto de la fecha, ej: "Hoy - 6 Oct 2026"
   String get _todayLabel {
     final now = DateTime.now();
     return 'Hoy - ${now.day} ${_months[now.month - 1]} ${now.year}';
   }
 
-  // ---------- Encabezado con fecha y botón de filtro ----------
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(2, 4, 0, 4),
-      child: Row(
+  // ---------- Mensaje con el contador ----------
+  // Ej: "Tienes 3 guías recogidas" (el número va grande y en naranja).
+  Widget _buildSummary() {
+    const style = TextStyle(fontSize: 15, color: AppColors.textSecondary);
+    final count = packages.length;
+
+    if (count == 0) {
+      return Text('No tienes guías ${statusLabel}s', style: style);
+    }
+
+    final noun = count == 1 ? 'guía $statusLabel' : 'guías ${statusLabel}s';
+    return Text.rich(
+      TextSpan(
+        style: style,
         children: [
-          Text(_todayLabel, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
-          const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.filter_list, color: AppColors.textPrimary),
-            visualDensity: VisualDensity.compact,
-            onPressed: () {
-              // TO DO: Filtrar por fecha
-            },
+          const TextSpan(text: 'Tienes '),
+          TextSpan(
+            text: '$count',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primary,
+            ),
           ),
+          TextSpan(text: ' $noun'),
         ],
       ),
     );
   }
 
+  // ---------- Encabezado normal: mensaje, fecha y filtro ----------
+  Widget _buildHeader() {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSummary(),
+              // Fecha (solo Recogidos y Entregados)
+              if (showDateHeader)
+                Text(
+                  _todayLabel,
+                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                ),
+            ],
+          ),
+        ),
+        // Botón de filtro (solo Recogidos y Entregados)
+        if (showDateHeader)
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            style: IconButton.styleFrom(backgroundColor: Colors.white),
+            onPressed: () {
+              // TO DO: Filtrar por fecha
+            },
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (packages.isEmpty) {
-      return const Center(child: Text('No hay guías'));
-    }
-
-    // Si hay encabezado, ocupa la posición 0 y las guías se corren una posición
-    final offset = showDateHeader ? 1 : 0;
+    // Si no hay guías se muestra el encabezado y un mensaje debajo
+    final itemCount = packages.isEmpty ? 2 : packages.length + 1;
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      itemCount: packages.length + offset,
+      // Sin margen lateral: el encabezado propio ocupa todo el ancho,
+      // y los demás elementos llevan su margen de 16 por separado.
+      padding: const EdgeInsets.only(bottom: 16),
+      itemCount: itemCount,
       separatorBuilder: (_, _) => const SizedBox(height: 10), // espacio entre tarjetas
       itemBuilder: (context, index) {
-        if (showDateHeader && index == 0) return _buildHeader();
+        if (index == 0) {
+          return header ??
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 12, 16, 0),
+                child: _buildHeader(),
+              );
+        }
 
-        final package = packages[index - offset];
-        return PackageCard(
-          package: package,
-          onTap: () {
-            // TO DO: Abrir el detalle de la guía
-          },
+        if (packages.isEmpty) {
+          return const Padding(
+            padding: EdgeInsets.only(top: 48),
+            child: Center(child: Text('No hay guías')),
+          );
+        }
+
+        final package = packages[index - 1];
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: PackageCard(
+            package: package,
+            onTap: () {
+              // TO DO: Abrir el detalle de la guía
+            },
+          ),
         );
       },
     );

@@ -46,19 +46,21 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  // Estilo reutilizable para los dos campos de texto (borde gris, naranja al enfocar).
-  InputDecoration _decoration(String label) {
-    final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(4),
-      borderSide: const BorderSide(color: AppColors.border),
-    );
+  // Estilo reutilizable para los dos campos: fondo blanco, esquinas redondeadas,
+  // icono a la izquierda y borde naranja al enfocar.
+  InputDecoration _decoration(String label, IconData icon) {
+    OutlineInputBorder border(Color color, double width) => OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: color, width: width),
+        );
     return InputDecoration(
       labelText: label,
-      border: border,
-      enabledBorder: border,
-      focusedBorder: border.copyWith(
-        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-      ),
+      prefixIcon: Icon(icon),
+      filled: true,
+      fillColor: Colors.white,
+      border: border(AppColors.outlineVariant, 1),
+      enabledBorder: border(AppColors.outlineVariant, 1),
+      focusedBorder: border(AppColors.primary, 1.5),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
     );
   }
@@ -78,13 +80,13 @@ class _LoginViewState extends State<LoginView> {
           alignment: const Alignment(0, -0.6),
           // SingleChildScrollView: permite hacer scroll cuando sale el teclado
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 60),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
               mainAxisSize: MainAxisSize.min, // ocupa solo el espacio necesario
               crossAxisAlignment: CrossAxisAlignment.start, // alinea a la izquierda
               children: [
                 // ----- Logo -----
-                Center(child: Image.asset('assets/images/logo.png', width: 240)),
+                Center(child: Image.asset('assets/images/logo.png', width: 220)),
                 const SizedBox(height: 28),
 
                 // ----- Título y subtítulo -----
@@ -100,7 +102,7 @@ class _LoginViewState extends State<LoginView> {
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress, // teclado con @
                   textInputAction: TextInputAction.next, // Enter pasa al siguiente campo
-                  decoration: _decoration('Correo electrónico'),
+                  decoration: _decoration('Correo electrónico', Icons.mail_outline),
                 ),
                 const SizedBox(height: 20),
 
@@ -110,15 +112,30 @@ class _LoginViewState extends State<LoginView> {
                   obscureText: true, // oculta lo escrito (••••)
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) => _onLogin(), // Enter = presionar "Ingresar"
-                  decoration: _decoration('Contraseña'),
+                  decoration: _decoration('Contraseña', Icons.lock_outline),
                 ),
 
                 // ----- Mensaje de error (solo se muestra si hay uno) -----
                 if (vm.errorMessage != null) ...[
                   const SizedBox(height: 12),
-                  Text(
-                    vm.errorMessage!,
-                    style: const TextStyle(color: AppColors.error, fontSize: 12),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.urgentBackground,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.error_outline, size: 18, color: AppColors.error),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            vm.errorMessage!,
+                            style: const TextStyle(color: AppColors.error, fontSize: 13),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
                 const SizedBox(height: 28),

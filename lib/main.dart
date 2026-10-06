@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'core/app_theme.dart';
 import 'viewmodels/login_viewmodel.dart';
 import 'viewmodels/packages_viewmodel.dart';
+import 'viewmodels/user_viewmodel.dart';
 import 'views/login_view.dart';
 
 // Punto de entrada de la app: Flutter empieza a ejecutar aquí.
@@ -22,6 +23,7 @@ class DropXApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => PackagesViewModel()),
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
       ],
       child: MaterialApp(
         title: 'DropX',

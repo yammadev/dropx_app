@@ -32,16 +32,20 @@ dropx_app/
 │   ├── core/
 │   │   └── app_theme.dart            # Colores de la marca y tema global
 │   ├── models/
-│   │   └── package_model.dart        # Modelo de guía y su estado
+│   │   ├── package_model.dart        # Modelo de guía y su estado
+│   │   └── user_model.dart           # Modelo del repartidor (nombre y correo)
 │   ├── viewmodels/
 │   │   ├── login_viewmodel.dart      # Estado y lógica del login
-│   │   └── packages_viewmodel.dart   # Listas de guías (datos de ejemplo)
+│   │   ├── packages_viewmodel.dart   # Listas de guías (datos de ejemplo)
+│   │   └── user_viewmodel.dart       # Usuario en sesión y cierre de sesión
 │   ├── views/
-│   │   ├── home_view.dart            # Home con las 3 pestañas
-│   │   └── login_view.dart           # Pantalla de login (UI)
+│   │   ├── home_view.dart            # Home con las 4 pestañas
+│   │   ├── login_view.dart           # Pantalla de login (UI)
+│   │   └── profile_view.dart         # Pestaña de perfil del repartidor
 │   ├── widgets/
 │   │   ├── package_card.dart         # Tarjeta de una guía
-│   │   └── package_list.dart         # Lista de guías reutilizable
+│   │   ├── package_list.dart         # Lista de guías reutilizable
+│   │   └── pending_header.dart       # Encabezado de Pendientes (saludo, resumen y progreso)
 │   └── main.dart                     # Punto de entrada, MaterialApp y Providers
 ├── pubspec.yaml          # Dependencias y assets
 └── README.md             # Documentación
@@ -64,6 +68,25 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
+
+## [0.0.4] - 2026-10-06
+### Agregado
+- UI mejorada.
+- Pestaña de perfil del repartidor (nombre, correo, cambiar contraseña y cerrar sesión).
+- Modelo `UserModel` y `UserViewModel` (usuario de ejemplo).
+- Cambiar contraseña y cierre de sesión (sólo UI). 
+- Encabezado de Pendientes, saludo según la hora, mensaje con el contador, cajitas de urgentes y km en total, y tarjeta con el progreso general. El mensaje y el progreso son generales, no solo del día.
+
+### Cambiado
+- Barra superior naranja (color de la marca) con título e iconos blancos.
+- La barra inferior pasa de 3 a 4 pestañas y usa el estilo de Material: icono relleno blanco sobre una píldora naranja en la pestaña activa.
+- Fondo gris tenue en toda la app; las tarjetas van en blanco encima.
+- Tarjetas de guía compactas al estilo Material: número de guía, ruta con iconos de origen y destino, y cajitas con icono para peso y distancia; borde suave.
+- Las guías urgentes se muestran con fondo rosa claro y borde rojo y una cajita "Urgente".
+- Login: campos blancos con esquinas redondeadas e iconos, mensaje de error en cajita rosa.
+- Pendientes ya no lleva barra superior, el encabezado naranja llega hasta arriba. Las demás pestañas conservan su barra con título y flecha.
+- Los números de guía usan el prefijo `DX` (ej: `DX152216`).
+- Recogidos y Entregados muestran un mensaje con el contador (ej: "Tienes 3 guías recogidas").
 
 ## [0.0.3] - 2026-10-06
 ### Agregado
