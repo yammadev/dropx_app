@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../core/app_theme.dart';
 import '../viewmodels/login_viewmodel.dart';
+import 'home_view.dart';
 
 // Pantalla de login. Es StatefulWidget porque necesita guardar los
 // controladores de los campos de texto (que hay que liberar al cerrar).
@@ -36,7 +37,13 @@ class _LoginViewState extends State<LoginView> {
           _passCtrl.text,
         );
     if (!ok || !mounted) return; // si falló o la pantalla se cerró, no hacer nada
-    // TO DO: navegar al Home
+
+    // pushReplacement reemplaza el login por el Home: al presionar "atrás"
+    // en el Home no se vuelve al login.
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HomeView()),
+    );
   }
 
   // Estilo reutilizable para los dos campos de texto (borde gris, naranja al enfocar).

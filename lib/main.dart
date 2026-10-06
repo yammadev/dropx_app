@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'core/app_theme.dart';
 import 'viewmodels/login_viewmodel.dart';
+import 'viewmodels/packages_viewmodel.dart';
 import 'views/login_view.dart';
 
 // Punto de entrada de la app: Flutter empieza a ejecutar aquí.
@@ -14,17 +15,19 @@ class DropXApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DropX',
-      debugShowCheckedModeBanner: false, // quita la cinta "debug"
-      theme: AppTheme.light, // colores y estilos globales (core/app_theme.dart)
-
-      // Pantalla inicial. Por ahora es el login; las rutas llegan con el Home.
-      // ChangeNotifierProvider crea el LoginViewModel y lo deja disponible
-      // para LoginView (y sus hijos) mediante context.read / context.watch.
-      home: ChangeNotifierProvider(
-        create: (_) => LoginViewModel(),
-        child: const LoginView(),
+    // MultiProvider crea los ViewModels y los deja disponibles para todas
+    // las pantallas (context.read / context.watch). Va por encima del
+    // MaterialApp para que lo vean tanto el login como el Home.
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => PackagesViewModel()),
+      ],
+      child: MaterialApp(
+        title: 'DropX',
+        debugShowCheckedModeBanner: false, // quita la cinta "debug"
+        theme: AppTheme.light, // colores y estilos globales (core/app_theme.dart)
+        home: const LoginView(), // Pantalla inicial
       ),
     );
   }

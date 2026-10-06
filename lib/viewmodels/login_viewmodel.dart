@@ -16,23 +16,12 @@ class LoginViewModel extends ChangeNotifier {
   // ---------- Acciones ----------
   /// Intenta iniciar sesión. Devuelve true si salió bien.
   Future<bool> login(String email, String password) async {
-    // ---------------- FASE API (comentado) ----------------
-    // _isLoading = true;
-    // _errorMessage = null;
-    // notifyListeners(); // avisa a la vista: muestra el spinner
-    //
-    // try {
-    //   // AuthService hace POST /api/auth/login y guarda el JWT
-    //   await _authService.login(email.trim(), password);
-    //   return true;
-    // } catch (e) {
-    //   _errorMessage = e.toString().replaceFirst('Exception: ', '');
-    //   return false;
-    // } finally {
-    //   _isLoading = false;
-    //   notifyListeners(); // avisa a la vista: quita el spinner / muestra error
-    // }
-    // ------------------------------------------------------
+    
+    // TO DO: Enviar correo y contraseña a la API (POST /api/auth/login).
+    // - Poner _isLoading en true y avisar a la vista (notifyListeners).
+    // - Si responde bien: guardar el token JWT y devolver true.
+    // - Si falla: guardar el mensaje en _errorMessage y devolver false.
+    // - Al terminar: poner _isLoading en false y avisar a la vista otra vez.
 
     // Mientras tanto: no se validan credenciales, siempre "funciona".
     return true;

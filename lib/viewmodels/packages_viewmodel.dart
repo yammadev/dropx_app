@@ -1,0 +1,83 @@
+import 'package:flutter/foundation.dart';
+
+import '../models/package_model.dart';
+
+// ViewModel de las guías: guarda las tres listas que muestra el Home.
+class PackagesViewModel extends ChangeNotifier {
+  // ---------- Estado ----------
+  // Datos de ejemplo. Se reemplazan por los de la API en la fase de conexión.
+  final List<PackageModel> _pending = const [
+    PackageModel(
+      number: '152216', weightKg: 10.0, isUrgent: true, status: PackageStatus.pending,
+      originAddress: 'Cr # 1 - Cl 15 - B/ Bocagrande',
+      destinationAddress: 'Cl 24 Cra 10b - B/ Getsemaní', distanceKm: 3.2,
+    ),
+    PackageModel(
+      number: '152222', weightKg: 5.5, isUrgent: true, status: PackageStatus.pending,
+      originAddress: 'Cl Larga Cr 10c - B/ Getsemaní',
+      destinationAddress: 'Tv 40 Dg 24 - B/ Bruselas', distanceKm: 4.9,
+    ),
+    PackageModel(
+      number: '153255', weightKg: 15.5, status: PackageStatus.pending,
+      originAddress: 'Tv 69A Cl 31E Lt 3 - B/ 13 de Junio',
+      destinationAddress: 'Cra 121 Cl 23 Lt 2 - B/ El Rodeo', distanceKm: 5.4,
+    ),
+    PackageModel(
+      number: '153305', weightKg: 2.5, status: PackageStatus.pending,
+      originAddress: 'Cr 80 #15-140 - B/ Villa Rubia',
+      destinationAddress: 'Dg 28 A #55b-2 A - B/ Ceballos', distanceKm: 2.9,
+    ),
+    PackageModel(
+      number: '163355', weightKg: 22.5, status: PackageStatus.pending,
+      originAddress: 'Tv 47 #23a-107 - B/ Los Calamares',
+      destinationAddress: 'Cl 29d #21A - B/ Pie de la Popa', distanceKm: 5.2,
+    ),
+    PackageModel(
+      number: '163356', weightKg: 3.8, status: PackageStatus.pending,
+      originAddress: 'Cl 49 # 13-113 - B/ Torices',
+      destinationAddress: 'M8 Via al mar - B/ Serena del Mar', distanceKm: 12.5,
+    ),
+  ];
+
+  final List<PackageModel> _inTransit = const [
+    PackageModel(
+      number: '142156', weightKg: 18.2, isUrgent: true, status: PackageStatus.inTransit,
+      originAddress: 'Dg 32 #80-918 - B/ Beirut',
+      destinationAddress: 'Lt 20 Mz 36 Cl 25 - B/ Bellavista', distanceKm: 2.8,
+    ),
+    PackageModel(
+      number: '142356', weightKg: 10.5, status: PackageStatus.inTransit,
+      originAddress: 'Dg 32 #80-547 - Parque Heredia Cr Barlovento',
+      destinationAddress: 'Mz 132 Lt 9 P 134 - B/ El Socorro', distanceKm: 2.5,
+    ),
+    PackageModel(
+      number: '143564', weightKg: 7.0, status: PackageStatus.inTransit,
+      originAddress: 'Cr 83B #37C59 - Parque Heredia Cr Caracoli',
+      destinationAddress: 'Cr 49C #28 - B/ Piedra de Bolívar', distanceKm: 5.0,
+    ),
+  ];
+
+  final List<PackageModel> _delivered = const [
+    PackageModel(
+      number: '141001', weightKg: 4.2, status: PackageStatus.delivered,
+      originAddress: 'Cl 30 #17-20 - B/ Manga',
+      destinationAddress: 'Cr 21 #25-40 - B/ Chiquinquirá', distanceKm: 3.1,
+    ),
+    PackageModel(
+      number: '141002', weightKg: 12.0, status: PackageStatus.delivered,
+      originAddress: 'Av. Pedro de Heredia #31-10 - B/ Pie de la Popa',
+      destinationAddress: 'Cl 70 #52-15 - B/ Crespo', distanceKm: 6.4,
+    ),
+  ];
+
+  // Getters: la vista lee las listas, pero no puede modificarlas
+  List<PackageModel> get pending => _pending;
+  List<PackageModel> get inTransit => _inTransit;
+  List<PackageModel> get delivered => _delivered;
+
+  // ---------- Acciones ----------
+  // TO DO: Cargar las guías desde la API (GET /api/packages?status=...) enviando el token JWT.
+  // - Agregar _isLoading y _errorMessage, y avisar a la vista (notifyListeners)
+  //   al empezar y al terminar para mostrar el indicador de carga o el error.
+  // - Las tres listas dejan de ser `final` y empiezan vacías (= []).
+}
