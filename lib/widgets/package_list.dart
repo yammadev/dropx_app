@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/app_theme.dart';
 import '../models/package_model.dart';
+import '../views/package_view.dart';
 import 'package_card.dart';
 
 // Lista de guías reutilizable: la usan las tres pestañas del Home.
@@ -123,9 +124,11 @@ class PackageList extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: PackageCard(
             package: package,
-            onTap: () {
-              // TO DO: Abrir el detalle de la guía
-            },
+            // Abre el detalle de la guía
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => PackageView(package: package)),
+            ),
           ),
         );
       },

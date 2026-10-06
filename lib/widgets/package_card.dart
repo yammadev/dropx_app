@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_theme.dart';
+import '../core/package_status_style.dart';
 import '../models/package_model.dart';
 
 // Tarjeta de una guía dentro de las listas (estilo "outlined card" de Material 3).
-// Muestra: número de guía, la ruta (origen -> destino) y cajitas con
+// Muestra: número de guía con su estado, la ruta (origen -> destino) y cajitas con
 // peso y distancia. Normal: blanca con borde gris. Urgente: rosa con borde rojo
 // y una cajita "Urgente".
 class PackageCard extends StatelessWidget {
@@ -34,6 +35,30 @@ class PackageCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Cajita con el estado de la guía (color e icono según el estado)
+  Widget _buildStatusBox() {
+    final status = package.status;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: status.color,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(status.icon, size: 14, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            status.label,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
           ),
         ],
       ),
@@ -87,14 +112,21 @@ class PackageCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ----- Encabezado: número de guía -----
-              Text(
-                'Guía ${package.number}', // el número ya trae el prefijo, ej: DX152216
-                // Estilo "titleMedium" del tema de Material 3, un poco más grueso
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w600),
+              // ----- Encabezado: número de guía y su estado -----
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Guía ${package.number}', // el número ya trae el prefijo, ej: DX-152216
+                      // Estilo "titleMedium" del tema de Material 3, un poco más grueso
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  _buildStatusBox(),
+                ],
               ),
               const SizedBox(height: 12),
 

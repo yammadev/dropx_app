@@ -10,6 +10,9 @@ class AppColors {
   static const border = Color(0xFF79747E);      // Borde de los campos
   static const outlineVariant = Color(0xFFCAC4D0);    // Borde suave de las tarjetas (Material 3)
   static const error = Color(0xFFE53935);       // Mensajes de error
+  static const info = Color(0xFF1E88E5);        // Estado: recogido
+  static const success = Color(0xFF2E9E5B);     // Estado: entregado
+  static const problem = Color(0xFF7B3FA0);     // Estado: con novedad
   static const textSecondary = Color(0xFF5F5F5F);     // Textos pequeños (direcciones)
   static const urgentBackground = Color(0xFFFDE8E6);  // Fondo rosa de la tarjeta urgente
   static const background = Color(0xFFF4F4F4);        // Fondo gris tenue de las pantallas
