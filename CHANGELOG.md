@@ -6,6 +6,9 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
+## [0.0.8] - 2026-11-05
+### Cambiado
+- La app queda limitada a Cartagena de Indias: la descripción y los datos de ejemplo (barrios y direcciones) corresponden a la ciudad.
 
 ## [0.0.7] - 2026-11-05
 ### Cambiado

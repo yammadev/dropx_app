@@ -5,7 +5,7 @@ import '../models/package_model.dart';
 // ViewModel de las guías: guarda las tres listas que muestra el Home.
 class PackagesViewModel extends ChangeNotifier {
   // ---------- Estado ----------
-  // Datos de ejemplo. Se reemplazan por los de la API en la fase de conexión.
+  // Datos de ejemplo (direcciones y barrios de Cartagena de Indias). Se reemplazan por los de la API en la fase de conexión.
   static const _sender = ContactModel(
     name: 'Harry Cruz López',
     document: 'CC 1.100.000.000',

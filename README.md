@@ -1,6 +1,6 @@
 # DropX App
 
-Aplicación móvil para repartidores del proyecto DropX (gestión de entregas), desarrollada con Flutter.
+Aplicación móvil para repartidores del proyecto DropX (mensajería y logística en Cartagena de Indias), desarrollada con Flutter.
 
 ## Ejecutar en modo de prueba
 **Requisitos:** [Flutter](https://docs.flutter.dev/get-started/install) instalado (Dart 3.13.3 o superior) y un emulador o un dispositivo conectado.
