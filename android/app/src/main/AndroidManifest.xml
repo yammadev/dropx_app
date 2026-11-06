@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Permiso para conectarse a internet (la API) -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- TO DO: Quitar usesCleartextTraffic cuando la API tenga HTTPS. -->
     <application
         android:label="dropx_app"
         android:name="${applicationName}"

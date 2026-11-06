@@ -6,6 +6,22 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
+## [1.0.0] - 2026-11-06
+### Agregado
+- Conexión con la API: `ApiConfig` (dirección de la API) y `ApiService` (login y guías asignadas, con mensajes de error en español).
+- Inicio de sesión real (`POST /api/auth/login`): solo entran cuentas de repartidor; el token JWT se guarda en el teléfono con `shared_preferences`.
+- Guías asignadas (`GET /api/packages`): las pestañas Pendientes, Recogidos y Entregados muestran las guías del repartidor, con indicador de carga y botón para reintentar si falla.
+- `fromJson` en `UserModel`, `PackageModel` y `ContactModel`, con la equivalencia de estados (`picked_up` = en tránsito, `issue` = problema).
+- Permiso de internet en Android.
+
+### Cambiado
+- El perfil muestra el nombre y el correo del repartidor que inició sesión.
+- Cerrar sesión borra el token y vacía las guías.
+- `http` y `shared_preferences` pasan a ser dependencias del proyecto.
+
+### Eliminado
+- Los datos de ejemplo de `PackagesViewModel` y `UserViewModel`.
+
 ## [0.0.8] - 2026-11-05
 ### Cambiado
 - La app queda limitada a Cartagena de Indias: la descripción y los datos de ejemplo (barrios y direcciones) corresponden a la ciudad.
