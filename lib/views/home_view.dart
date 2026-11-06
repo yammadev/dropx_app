@@ -28,33 +28,6 @@ class _HomeViewState extends State<HomeView> {
   // Vuelve a la pestaña Pendientes
   void _goToPending() => setState(() => _currentIndex = 0);
 
-  // Muestra la lista, o el indicador de carga / el error con el botón para reintentar
-  Widget _buildTab(PackagesViewModel vm, Widget list) {
-    if (vm.isLoading && vm.totalCount == 0) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (vm.errorMessage != null) return _buildError(vm);
-    return list;
-  }
-
-  Widget _buildError(PackagesViewModel vm) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.cloud_off, size: 48),
-            const SizedBox(height: 12),
-            Text(vm.errorMessage!, textAlign: TextAlign.center),
-            const SizedBox(height: 16),
-            FilledButton(onPressed: vm.loadPackages, child: const Text('Reintentar')),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     // Escucha el ViewModel: si las listas cambian, se redibuja
@@ -93,28 +66,17 @@ class _HomeViewState extends State<HomeView> {
                 ),
 
           // ---------- Contenido: una pantalla por pestaña ----------
-          // IndexedStack mantiene las 4 vivas y muestra solo la seleccionada.
-          // Las pestañas de guías muestran el aviso de carga o de error si aplica;
-          // el Perfil siempre se puede abrir (para cerrar sesión si el token venció).
+          // IndexedStack mantiene las 4 vivas y muestra solo la seleccionada
           body: IndexedStack(
             index: _currentIndex,
             children: [
-              _buildTab(
-                vm,
-                PackageList(
-                  packages: vm.pending,
-                  statusLabel: 'pendiente',
-                  header: const PendingHeader(), // saludo, resumen y progreso
-                ),
+              PackageList(
+                packages: vm.pending,
+                statusLabel: 'pendiente',
+                header: const PendingHeader(), // saludo, resumen y progreso
               ),
-              _buildTab(
-                vm,
-                PackageList(packages: vm.inTransit, statusLabel: 'recogida', showDateHeader: true),
-              ),
-              _buildTab(
-                vm,
-                PackageList(packages: vm.delivered, statusLabel: 'entregada', showDateHeader: true),
-              ),
+              PackageList(packages: vm.inTransit, statusLabel: 'recogida', showDateHeader: true),
+              PackageList(packages: vm.delivered, statusLabel: 'entregada', showDateHeader: true),
               const ProfileView(),
             ],
           ),

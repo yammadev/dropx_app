@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../core/app_theme.dart';
 import '../viewmodels/login_viewmodel.dart';
-import '../viewmodels/packages_viewmodel.dart';
-import '../viewmodels/user_viewmodel.dart';
 import 'home_view.dart';
 
 // Pantalla de login. Es StatefulWidget porque necesita guardar los
@@ -34,13 +32,11 @@ class _LoginViewState extends State<LoginView> {
   // Se llama al presionar "Ingresar" (o Enter en el campo de contraseña).
   Future<void> _onLogin() async {
     // context.read: usa el ViewModel una sola vez, sin escuchar cambios.
-    final loginVm = context.read<LoginViewModel>();
-    final ok = await loginVm.login(_emailCtrl.text, _passCtrl.text);
+    final ok = await context.read<LoginViewModel>().login(
+          _emailCtrl.text,
+          _passCtrl.text,
+        );
     if (!ok || !mounted) return; // si falló o la pantalla se cerró, no hacer nada
-
-    // Guarda el usuario para el perfil y pide las guías a la API
-    context.read<UserViewModel>().setUser(loginVm.user!);
-    context.read<PackagesViewModel>().loadPackages();
 
     // pushReplacement reemplaza el login por el Home: al presionar "atrás"
     // en el Home no se vuelve al login.

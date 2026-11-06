@@ -13,13 +13,6 @@ class ContactModel {
     required this.document,
     required this.phone,
   });
-
-  // Crea el contacto a partir del JSON de la API (el documento puede venir vacío)
-  factory ContactModel.fromJson(Map<String, dynamic> json) => ContactModel(
-        name: json['name'],
-        document: json['document'] ?? '',
-        phone: json['phone'],
-      );
 }
 
 // Datos de una guía: lo que muestra la tarjeta de la lista y la pantalla de detalle.
@@ -47,27 +40,4 @@ class PackageModel {
     required this.updatedAt,
     this.isUrgent = false,
   });
-
-  // Crea la guía a partir del JSON de la API.
-  factory PackageModel.fromJson(Map<String, dynamic> json) => PackageModel(
-        number: json['number'],
-        weightKg: (json['weightKg'] as num).toDouble(),
-        originAddress: json['originAddress'],
-        destinationAddress: json['destinationAddress'],
-        distanceKm: (json['distanceKm'] as num).toDouble(),
-        isUrgent: json['isUrgent'],
-        status: _statusFromApi(json['status']),
-        sender: ContactModel.fromJson(json['sender']),
-        receiver: ContactModel.fromJson(json['receiver']),
-        updatedAt: DateTime.parse(json['updatedAt']),
-      );
-
-  // Estados de la API -> estados de la app:
-  // pending = pendiente, picked_up = en tránsito, delivered = entregada, issue = problema
-  static PackageStatus _statusFromApi(String status) => switch (status) {
-        'picked_up' => PackageStatus.inTransit,
-        'delivered' => PackageStatus.delivered,
-        'issue' => PackageStatus.problem,
-        _ => PackageStatus.pending,
-      };
 }
