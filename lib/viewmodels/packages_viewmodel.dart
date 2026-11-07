@@ -12,6 +12,7 @@ class PackagesViewModel extends ChangeNotifier {
   List<PackageModel> _inTransit = []; // incluye las guías con novedad
   List<PackageModel> _delivered = [];
   bool _isLoading = false; // true mientras se cargan las guías
+  bool _isUpdating = false; // true mientras se cambia el estado de una guía
   String? _errorMessage; // mensaje de error a mostrar (null = sin error)
 
   // Getters: la vista lee las listas, pero no puede modificarlas
@@ -19,6 +20,7 @@ class PackagesViewModel extends ChangeNotifier {
   List<PackageModel> get inTransit => _inTransit;
   List<PackageModel> get delivered => _delivered;
   bool get isLoading => _isLoading;
+  bool get isUpdating => _isUpdating;
   String? get errorMessage => _errorMessage;
 
   // Resumen para el encabezado de Pendientes
@@ -60,5 +62,22 @@ class PackagesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // TO DO: Cambiar el estado de una guía (recoger, entregar, reportar novedad).
+  /// Cambia el estado de una guía (PATCH /api/packages/<id>/status) y recarga las listas.
+  /// Devuelve null si salió bien, o el mensaje de error.
+  Future<String?> changeStatus(PackageModel package, PackageStatus status) async {
+    _isUpdating = true;
+    notifyListeners();
+
+    try {
+      await _api.changeStatus(package.id, status);
+    } on ApiException catch (e) {
+      return e.message;
+    } finally {
+      _isUpdating = false;
+      notifyListeners();
+    }
+
+    await loadPackages();
+    return null;
+  }
 }

@@ -73,6 +73,23 @@ class ApiService {
     return (data['packages'] as List).map((item) => PackageModel.fromJson(item)).toList();
   }
 
+  /// PATCH /api/packages/<id>/status. Cambia el estado y devuelve la guía actualizada.
+  Future<PackageModel> changeStatus(int packageId, PackageStatus status) async {
+    final token = await readToken();
+    if (token == null) {
+      throw const ApiException('La sesión no está iniciada.');
+    }
+
+    final data = await _send(
+      () => http.patch(
+        Uri.parse('${ApiConfig.baseUrl}/api/packages/$packageId/status'),
+        headers: {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'},
+        body: jsonEncode({'status': status.apiValue}),
+      ),
+    );
+    return PackageModel.fromJson(data['package']);
+  }
+
   // ---------- Ayuda interna ----------
   // Mensaje cuando no se logra llegar al servidor; incluye la dirección usada para ayudar a corregirla.
   String get _noConnection =>

@@ -2,11 +2,22 @@
 
 Aplicación móvil para repartidores del proyecto DropX (mensajería y logística en Cartagena de Indias), desarrollada con Flutter.
 
+## Capturas
+
+| Emulador | Loading | Login | Perfil |
+|---|---|---|---|
+| <img src="docs/screenshots/app-emulador.png" width="200"> | <img src="docs/screenshots/app-loading.png" width="200"> | <img src="docs/screenshots/app-login.png" width="200"> | <img src="docs/screenshots/app-perfil.png" width="200"> |
+| **Pendientes** | **Recogidos** | **Entregados** | **Paquete** |
+| <img src="docs/screenshots/app-pendientes.png" width="200"> | <img src="docs/screenshots/app-recogidos.png" width="200"> | <img src="docs/screenshots/app-entregados.png" width="200"> | <img src="docs/screenshots/app-paquete.png" width="200"> |
+
 ## Ejecutar en modo de prueba
 **Requisitos:** [Flutter](https://docs.flutter.dev/get-started/install) instalado (Dart 3.13.3 o superior), un emulador o dispositivo conectado y la API de [dropx_web](https://github.com/deavilajuan/dropx_web) en ejecución con los datos de prueba cargados.
 
 ```bash
+# Copiar .env y generar llave aleatoria
 cp .env.example .env
+
+# Instalar requerimientos y encender
 flutter pub get
 flutter run
 ```
@@ -25,6 +36,10 @@ La configuración está en el archivo `.env` de la raíz (no se sube a GitHub; e
 - Celular real: `http://<IP de la computadora>:5000`, con ambos en la misma red Wi-Fi (la API debe iniciarse con `--host 0.0.0.0`).
 
 Al cambiar el `.env` hay que detener la app y ejecutar `flutter run` de nuevo (un hot reload no lo recarga).
+
+**Recargar las guías:** la app no recibe avisos en tiempo real. Para ver las guías nuevas, se usa el botón de recargar (arriba a la derecha) o deslizar la lista hacia abajo.
+
+**Cambiar el estado de una guía:** en el detalle, los botones de abajo permiten marcarla como recogida o entregada, reportar una novedad o retomar la entrega.
 
 **Si aparece un error de conexión:** el mensaje indica la dirección que usa la app; debe coincidir con la de la API y con el `.env`.
 
@@ -51,7 +66,7 @@ dropx_app/
 ├── ios/                  # Proyecto nativo iOS (generado por Flutter)
 ├── web/                  # Proyecto web (generado por Flutter)
 ├── assets/
-│   ├── icon/             # Ícono de la app (icon.png e icon_foreground.png)
+│   ├── icon/             # Ícono de la app y logo de la pantalla de carga
 │   └── images/           # Imágenes
 │       └── logo.png      # Logo
 ├── lib/
@@ -79,7 +94,9 @@ dropx_app/
 │   │   ├── package_card.dart         # Tarjeta de una guía
 │   │   ├── package_list.dart         # Lista de guías reutilizable
 │   │   ├── pending_header.dart       # Encabezado de Pendientes (saludo, resumen y progreso)
+│   │   ├── refresh_button.dart       # Botón para recargar las guías
 │   │   ├── route_card.dart           # Tarjeta de ruta del detalle (con el botón del mapa)
+│   │   ├── status_actions.dart       # Botones para cambiar el estado de la guía
 │   │   └── status_band.dart          # Banda de estado del detalle
 │   └── main.dart                     # Punto de entrada, MaterialApp y Providers
 ├── .env.example          # Modelo del .env (dirección de la API)

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/app_theme.dart';
 import '../models/package_model.dart';
+import '../viewmodels/packages_viewmodel.dart';
 import '../views/package_view.dart';
 import 'package_card.dart';
 
@@ -97,41 +99,47 @@ class PackageList extends StatelessWidget {
     // Si no hay guías se muestra el encabezado y un mensaje debajo
     final itemCount = packages.isEmpty ? 2 : packages.length + 1;
 
-    return ListView.separated(
-      // Sin margen lateral: el encabezado propio ocupa todo el ancho,
-      // y los demás elementos llevan su margen de 16 por separado.
-      padding: const EdgeInsets.only(bottom: 16),
-      itemCount: itemCount,
-      separatorBuilder: (_, _) => const SizedBox(height: 10), // espacio entre tarjetas
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return header ??
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 12, 16, 0),
-                child: _buildHeader(),
-              );
-        }
+    // Deslizar hacia abajo recarga las guías
+    return RefreshIndicator(
+      color: AppColors.primary,
+      onRefresh: context.read<PackagesViewModel>().loadPackages,
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(), // permite recargar aunque la lista sea corta
+        // Sin margen lateral: el encabezado propio ocupa todo el ancho,
+        // y los demás elementos llevan su margen de 16 por separado.
+        padding: const EdgeInsets.only(bottom: 16),
+        itemCount: itemCount,
+        separatorBuilder: (_, _) => const SizedBox(height: 10), // espacio entre tarjetas
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return header ??
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 12, 16, 0),
+                  child: _buildHeader(),
+                );
+          }
 
-        if (packages.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 48),
-            child: Center(child: Text('No hay guías')),
-          );
-        }
+          if (packages.isEmpty) {
+            return const Padding(
+              padding: EdgeInsets.only(top: 48),
+              child: Center(child: Text('No hay guías')),
+            );
+          }
 
-        final package = packages[index - 1];
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: PackageCard(
-            package: package,
-            // Abre el detalle de la guía
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => PackageView(package: package)),
+          final package = packages[index - 1];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: PackageCard(
+              package: package,
+              // Abre el detalle de la guía
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PackageView(package: package)),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

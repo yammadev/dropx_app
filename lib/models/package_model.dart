@@ -1,6 +1,15 @@
 // Estado de una guía. La pestaña "Recogidos" muestra las guías inTransit
 // y también las que tienen una novedad (problem), porque siguen en manos del repartidor.
-enum PackageStatus { pending, inTransit, delivered, problem }
+// Cada estado guarda su nombre en la API: picked_up = en tránsito, issue = problema.
+enum PackageStatus {
+  pending('pending'),
+  inTransit('picked_up'),
+  delivered('delivered'),
+  problem('issue');
+
+  final String apiValue;
+  const PackageStatus(this.apiValue);
+}
 
 // Persona que envía o recibe una guía (remitente o destinatario).
 class ContactModel {
@@ -24,6 +33,7 @@ class ContactModel {
 
 // Datos de una guía: lo que muestra la tarjeta de la lista y la pantalla de detalle.
 class PackageModel {
+  final int id; // identificador en la API (se usa para cambiar el estado)
   final String number;
   final double weightKg;
   final String originAddress;
@@ -36,6 +46,7 @@ class PackageModel {
   final DateTime updatedAt; // última actualización del estado
 
   const PackageModel({
+    required this.id,
     required this.number,
     required this.weightKg,
     required this.originAddress,
@@ -50,24 +61,30 @@ class PackageModel {
 
   // Crea la guía a partir del JSON de la API.
   factory PackageModel.fromJson(Map<String, dynamic> json) => PackageModel(
+        id: json['id'],
         number: json['number'],
         weightKg: (json['weightKg'] as num).toDouble(),
         originAddress: json['originAddress'],
         destinationAddress: json['destinationAddress'],
         distanceKm: (json['distanceKm'] as num).toDouble(),
         isUrgent: json['isUrgent'],
-        status: _statusFromApi(json['status']),
+        status: PackageStatus.values.firstWhere((s) => s.apiValue == json['status']),
         sender: ContactModel.fromJson(json['sender']),
         receiver: ContactModel.fromJson(json['receiver']),
         updatedAt: DateTime.parse(json['updatedAt']),
       );
 
-  // Estados de la API -> estados de la app:
-  // pending = pendiente, picked_up = en tránsito, delivered = entregada, issue = problema
-  static PackageStatus _statusFromApi(String status) => switch (status) {
-        'picked_up' => PackageStatus.inTransit,
-        'delivered' => PackageStatus.delivered,
-        'issue' => PackageStatus.problem,
-        _ => PackageStatus.pending,
-      };
+  // Guía de relleno: el esqueleto de carga (skeleton) la usa para dibujar la forma de las tarjetas.
+  factory PackageModel.placeholder() => PackageModel(
+        id: 0,
+        number: 'DX-000000',
+        weightKg: 10,
+        originAddress: 'Cr 00 # 00-00 - B/ Barrio',
+        destinationAddress: 'Cr 00 # 00-00 - B/ Barrio',
+        distanceKm: 5,
+        status: PackageStatus.pending,
+        sender: const ContactModel(name: 'Nombre Apellido', document: 'CC 0', phone: '300 000 0000'),
+        receiver: const ContactModel(name: 'Nombre Apellido', document: 'CC 0', phone: '300 000 0000'),
+        updatedAt: DateTime.now(),
+      );
 }

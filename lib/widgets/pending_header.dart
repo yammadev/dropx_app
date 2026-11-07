@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../core/app_theme.dart';
 import '../viewmodels/packages_viewmodel.dart';
 import '../viewmodels/user_viewmodel.dart';
+import 'refresh_button.dart';
 
 // Encabezado de la pestaña Pendientes (la pantalla de inicio):
 // saludo, mensaje con el contador, cajitas de resumen y tarjeta de progreso.
@@ -178,6 +179,13 @@ class PendingHeader extends StatelessWidget {
             // Mitad de la tarjeta + gap (espacio) de aire antes de la primera guía
             const SizedBox(height: _cardHeight / 2 + _gap),
           ],
+        ),
+
+        // Botón para recargar, arriba a la derecha (debajo de la barra de estado)
+        Positioned(
+          top: MediaQuery.paddingOf(context).top + 4,
+          right: 8,
+          child: const RefreshButton(),
         ),
 
         // Tarjeta de progreso, pegada abajo: cubre la mitad del naranja y la mitad del gris

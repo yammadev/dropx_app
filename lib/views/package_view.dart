@@ -4,6 +4,7 @@ import '../core/app_theme.dart';
 import '../models/package_model.dart';
 import '../widgets/contacts_card.dart';
 import '../widgets/route_card.dart';
+import '../widgets/status_actions.dart';
 import '../widgets/status_band.dart';
 
 // Pantalla de detalle de una guía (solo información básica).
@@ -86,6 +87,9 @@ class PackageView extends StatelessWidget {
         ),
         title: const Text('Detalle de guía'),
       ),
+
+      // ---------- Botones para cambiar el estado ----------
+      bottomNavigationBar: StatusActions(package: package),
 
       // ---------- Contenido con scroll ----------
       body: SingleChildScrollView(

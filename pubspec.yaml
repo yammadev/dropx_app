@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+2
+version: 1.2.0+3
 
 environment:
   sdk: ^3.13.3
@@ -38,6 +38,7 @@ dependencies:
   http: ^1.2.2 # peticiones a la API
   shared_preferences: ^2.3.3 # guarda el token JWT en el teléfono
   flutter_dotenv: ^5.2.1 # lee la dirección de la API desde el archivo .env
+  skeletonizer: ^2.0.1 # animación de carga (skeleton)
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +51,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.3 # genera el ícono de la app
+  flutter_native_splash: ^2.4.4 # genera la pantalla de carga al abrir la app
 
 # Ícono de la app: se genera con "dart run flutter_launcher_icons"
 flutter_launcher_icons:
@@ -59,6 +61,15 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   adaptive_icon_background: "#FF6300"
   adaptive_icon_foreground: assets/icon/icon_foreground.png
+
+# Pantalla de carga al abrir la app: se genera con "dart run flutter_native_splash:create"
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/icon/splash.png
+  web: false
+  android_12:
+    color: "#FFFFFF"
+    image: assets/icon/splash.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

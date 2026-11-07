@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // SystemUiOverlayStyle
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+
+import '../models/package_model.dart';
 
 import '../viewmodels/packages_viewmodel.dart';
 import '../widgets/package_list.dart';
 import '../widgets/pending_header.dart';
+import '../widgets/refresh_button.dart';
 import 'profile_view.dart';
 
 // Pantalla principal: 4 pestañas (barra inferior).
@@ -28,13 +32,30 @@ class _HomeViewState extends State<HomeView> {
   // Vuelve a la pestaña Pendientes
   void _goToPending() => setState(() => _currentIndex = 0);
 
-  // Muestra la lista, o el indicador de carga / el error con el botón para reintentar
-  Widget _buildTab(PackagesViewModel vm, Widget list) {
-    if (vm.isLoading && vm.totalCount == 0) {
-      return const Center(child: CircularProgressIndicator());
-    }
+  // Guías de relleno para dibujar el esqueleto mientras carga la primera vez
+  static final _placeholders = List.generate(4, (_) => PackageModel.placeholder());
+
+  // Muestra la lista (con el esqueleto animado mientras carga por primera vez) o el error con el botón para reintentar
+  Widget _buildTab(
+    PackagesViewModel vm, {
+    required List<PackageModel> packages,
+    required String statusLabel,
+    bool showDateHeader = false,
+    Widget? header,
+  }) {
     if (vm.errorMessage != null) return _buildError(vm);
-    return list;
+
+    final firstLoad = vm.isLoading && vm.totalCount == 0;
+    return Skeletonizer(
+      enabled: firstLoad,
+      ignoreContainers: true, // conserva los colores de las tarjetas y del encabezado
+      child: PackageList(
+        packages: firstLoad ? _placeholders : packages,
+        statusLabel: statusLabel,
+        showDateHeader: showDateHeader,
+        header: header,
+      ),
+    );
   }
 
   Widget _buildError(PackagesViewModel vm) {
@@ -90,6 +111,8 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   title: Text(_titles[_currentIndex]),
+                  // Recargar guías (no aplica en el Perfil)
+                  actions: [if (_currentIndex != 3) const RefreshButton()],
                 ),
 
           // ---------- Contenido: una pantalla por pestaña ----------
@@ -101,20 +124,12 @@ class _HomeViewState extends State<HomeView> {
             children: [
               _buildTab(
                 vm,
-                PackageList(
-                  packages: vm.pending,
-                  statusLabel: 'pendiente',
-                  header: const PendingHeader(), // saludo, resumen y progreso
-                ),
+                packages: vm.pending,
+                statusLabel: 'pendiente',
+                header: const PendingHeader(), // saludo, resumen y progreso
               ),
-              _buildTab(
-                vm,
-                PackageList(packages: vm.inTransit, statusLabel: 'recogida', showDateHeader: true),
-              ),
-              _buildTab(
-                vm,
-                PackageList(packages: vm.delivered, statusLabel: 'entregada', showDateHeader: true),
-              ),
+              _buildTab(vm, packages: vm.inTransit, statusLabel: 'recogida', showDateHeader: true),
+              _buildTab(vm, packages: vm.delivered, statusLabel: 'entregada', showDateHeader: true),
               const ProfileView(),
             ],
           ),

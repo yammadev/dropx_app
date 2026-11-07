@@ -6,7 +6,16 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
-## [1.0.0] - 2026-11-07
+
+## [1.2.0] - 2026-11-07
+### Agregado
+- Botón de recargar las guías (arriba a la derecha) y recarga al deslizar la lista hacia abajo, porque la app no recibe avisos en tiempo real.
+- Cambio de estado desde el detalle de la guía (`PATCH /api/packages/<id>/status`): marcar como recogida, entregada, reportar novedad o retomar la entrega, con confirmación. Las guías entregadas ya no se pueden cambiar.
+- Pantalla de carga al abrir la app (logo de DropX), generada con `flutter_native_splash`.
+- Animación de carga tipo esqueleto (skeleton) en las listas de guías, con `skeletonizer`.
+- `id` en `PackageModel` y `PackageStatus.apiValue` (nombre del estado en la API).
+
+## [1.1.0] - 2026-11-07
 ### Agregado
 - Conexión con la API (`dropx_web`): `ApiConfig` y `ApiService` (login y guías asignadas, con mensajes de error en español).
 - Inicio de sesión real (`POST /api/auth/login`): solo entran cuentas de repartidor; el token JWT se guarda en el teléfono con `shared_preferences`.
