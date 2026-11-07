@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'core/app_theme.dart';
@@ -8,7 +9,11 @@ import 'viewmodels/user_viewmodel.dart';
 import 'views/login_view.dart';
 
 // Punto de entrada de la app: Flutter empieza a ejecutar aquí.
-void main() => runApp(const DropXApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env'); // carga la dirección de la API
+  runApp(const DropXApp());
+}
 
 // Widget raíz: configura la app completa (nombre, tema y pantalla inicial).
 class DropXApp extends StatelessWidget {

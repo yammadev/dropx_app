@@ -6,6 +6,26 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
+## [1.0.0] - 2026-11-07
+### Agregado
+- Conexión con la API (`dropx_web`): `ApiConfig` y `ApiService` (login y guías asignadas, con mensajes de error en español).
+- Inicio de sesión real (`POST /api/auth/login`): solo entran cuentas de repartidor; el token JWT se guarda en el teléfono con `shared_preferences`.
+- Guías asignadas (`GET /api/packages`): las pestañas Pendientes, Recogidos y Entregados muestran las guías del repartidor, con indicador de carga y botón para reintentar si falla.
+- Archivo `.env` (modelo en `.env.example`) con `API_URL` y `API_TIMEOUT_SECONDS`, leído con `flutter_dotenv`.
+- Ícono de la app (logo de DropX), generado con `flutter_launcher_icons`.
+- `fromJson` en `UserModel`, `PackageModel` y `ContactModel`, con la equivalencia de estados (`picked_up` = en tránsito, `issue` = problema).
+- Permiso de internet en Android.
+- Guía para probar la app paso a paso en el `README.md`.
+
+### Cambiado
+- El nombre de la app en el celular pasa de `dropx_app` a `DropX` (Android e iOS).
+- El perfil muestra el nombre y el correo del repartidor que inició sesión.
+- Cerrar sesión borra el token y vacía las guías.
+- Las guías de ejemplo se reemplazan por las de la API.
+
+### Eliminado
+- Datos de ejemplo de las guías.
+
 ## [0.0.8] - 2026-11-05
 ### Cambiado
 - La app queda limitada a Cartagena de Indias: la descripción y los datos de ejemplo (barrios y direcciones) corresponden a la ciudad.

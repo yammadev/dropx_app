@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/app_theme.dart';
+import '../viewmodels/packages_viewmodel.dart';
 import '../viewmodels/user_viewmodel.dart';
 import 'login_view.dart';
 
@@ -86,6 +87,7 @@ class ProfileView extends StatelessWidget {
           onTap: () async {
             await context.read<UserViewModel>().logout();
             if (!context.mounted) return; // si la pantalla se cerró, no hacer nada
+            context.read<PackagesViewModel>().clear();
 
             // Vuelve al login y quita todas las pantallas anteriores:
             // con "atrás" no se puede regresar al Home.

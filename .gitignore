@@ -49,3 +49,6 @@ app.*.map.json
 
 # Other
 REQ.md
+
+# Configuración local (dirección de la API)
+.env

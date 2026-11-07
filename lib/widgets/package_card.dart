@@ -117,7 +117,7 @@ class PackageCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'Guía ${package.number}', // el número ya trae el prefijo, ej: DX-152216
+                      'Guía ${package.number}', // el número ya trae el prefijo, ej: DX-000001
                       // Estilo "titleMedium" del tema de Material 3, un poco más grueso
                       style: Theme.of(context)
                           .textTheme
