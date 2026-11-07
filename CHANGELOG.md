@@ -7,6 +7,16 @@ y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-07
+### Agregado
+- El botón "Ir al origen / destino en Google Maps" del detalle abre Google Maps (`url_launcher`) hacia el origen si la guía está pendiente o hacia el destino si ya fue recogida; usa la ubicación del mapa o, si no hay, la dirección.
+- Motivo de la novedad: se selecciona de una lista al reportarla y se muestra en la banda de estado del detalle.
+- Firma de quien recibe (`signature`): se pide al entregar y se envía a la API.
+- Coordenadas y motivo de novedad en `PackageModel`.
+
+### Eliminado
+- Botón de filtro de las pestañas Recogidos y Entregados (no tenía función).
+
 ## [1.2.2] - 2026-11-07
 ### Cambiado
 - Tamaño de las imágenes del README. 

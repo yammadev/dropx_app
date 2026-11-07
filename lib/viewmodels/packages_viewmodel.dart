@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/package_model.dart';
@@ -63,13 +65,19 @@ class PackagesViewModel extends ChangeNotifier {
   }
 
   /// Cambia el estado de una guía (PATCH /api/packages/<id>/status) y recarga las listas.
+  /// [reason]: motivo de la novedad; [signature]: firma de quien recibe (PNG).
   /// Devuelve null si salió bien, o el mensaje de error.
-  Future<String?> changeStatus(PackageModel package, PackageStatus status) async {
+  Future<String?> changeStatus(
+    PackageModel package,
+    PackageStatus status, {
+    String? reason,
+    Uint8List? signature,
+  }) async {
     _isUpdating = true;
     notifyListeners();
 
     try {
-      await _api.changeStatus(package.id, status);
+      await _api.changeStatus(package.id, status, reason: reason, signature: signature);
     } on ApiException catch (e) {
       return e.message;
     } finally {

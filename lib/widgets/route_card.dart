@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../core/app_theme.dart';
 import '../models/package_model.dart';
@@ -10,6 +11,27 @@ class RouteCard extends StatelessWidget {
   final PackageModel package;
 
   const RouteCard({super.key, required this.package});
+
+  // Abre Google Maps con la ruta hacia el punto al que debe ir el repartidor:
+  // el origen mientras la guía está pendiente por recoger, y el destino cuando ya se recogió.
+  // Si la guía no tiene ubicación en el mapa, se busca por la dirección (en Cartagena).
+  Future<void> _openMap(BuildContext context) async {
+    final toOrigin = package.status == PackageStatus.pending;
+    final lat = toOrigin ? package.originLat : package.destinationLat;
+    final lng = toOrigin ? package.originLng : package.destinationLng;
+    final address = toOrigin ? package.originAddress : package.destinationAddress;
+    final destination = lat != null && lng != null ? '$lat,$lng' : '$address, Cartagena, Colombia';
+
+    final url = Uri.https('www.google.com', '/maps/dir/', {
+      'api': '1',
+      'destination': destination,
+      'travelmode': 'driving',
+    });
+    final opened = await launchUrl(url, mode: LaunchMode.externalApplication);
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo abrir Google Maps.')));
+    }
+  }
 
   // Una parada de la ruta: icono en círculo, etiqueta (ORIGEN / DESTINO) y dirección
   Widget _buildStop({
@@ -120,15 +142,13 @@ class RouteCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
 
-          // Botón para ver la ruta en el mapa (sólo UI por ahora)
+          // Botón que abre Google Maps con la ruta hacia el origen (pendiente) o el destino (recogida)
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
-              onPressed: () {
-                // TO DO: Abrir el mapa con la ruta de origen a destino.
-              },
+              onPressed: () => _openMap(context),
               icon: const Icon(Icons.directions, size: 20),
-              label: const Text('Ver ruta en el mapa'),
+              label: Text(package.status == PackageStatus.pending ? 'Ir al origen en Google Maps' : 'Ir al destino en Google Maps'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary, width: 1.5),

@@ -39,6 +39,11 @@ class PackageModel {
   final String originAddress;
   final String destinationAddress;
   final double distanceKm;
+  final double? originLat; // ubicación en el mapa (la API la manda vacía si no se eligió)
+  final double? originLng;
+  final double? destinationLat;
+  final double? destinationLng;
+  final String? issueReason; // motivo de la novedad (solo si el estado es problem)
   final bool isUrgent;
   final PackageStatus status;
   final ContactModel sender; // quien remite (envía)
@@ -56,6 +61,11 @@ class PackageModel {
     required this.sender,
     required this.receiver,
     required this.updatedAt,
+    this.originLat,
+    this.originLng,
+    this.destinationLat,
+    this.destinationLng,
+    this.issueReason,
     this.isUrgent = false,
   });
 
@@ -67,6 +77,11 @@ class PackageModel {
         originAddress: json['originAddress'],
         destinationAddress: json['destinationAddress'],
         distanceKm: (json['distanceKm'] as num).toDouble(),
+        originLat: (json['originLat'] as num?)?.toDouble(),
+        originLng: (json['originLng'] as num?)?.toDouble(),
+        destinationLat: (json['destinationLat'] as num?)?.toDouble(),
+        destinationLng: (json['destinationLng'] as num?)?.toDouble(),
+        issueReason: json['issueReason'],
         isUrgent: json['isUrgent'],
         status: PackageStatus.values.firstWhere((s) => s.apiValue == json['status']),
         sender: ContactModel.fromJson(json['sender']),

@@ -9,6 +9,8 @@ Aplicación móvil para repartidores del proyecto DropX (mensajería y logístic
 | <img src="docs/screenshots/app-emulador.png" width="158" height="316"> | <img src="docs/screenshots/app-loading.png" width="158" height="316"> | <img src="docs/screenshots/app-login.png" width="158" height="316"> | <img src="docs/screenshots/app-perfil.png" width="158" height="316"> |
 | **Pendientes** | **Recogidos** | **Entregados** | **Paquete** |
 | <img src="docs/screenshots/app-pendientes.png" width="158" height="316"> | <img src="docs/screenshots/app-recogidos.png" width="158" height="316"> | <img src="docs/screenshots/app-entregados.png" width="158" height="316"> | <img src="docs/screenshots/app-paquete.png" width="158" height="316"> |
+| **Navegación** | **Cambio de estado** | **Novedad** | **Entregado** |
+| <img src="docs/screenshots/app-navegar.png" width="158" height="316"> | <img src="docs/screenshots/app-recogida.png" width="158" height="316"> | <img src="docs/screenshots/app-novedad.png" width="158" height="316"> | <img src="docs/screenshots/app-entregado.png" width="158" height="316"> |
 
 ## Ejecutar en modo de prueba
 **Requisitos:** [Flutter](https://docs.flutter.dev/get-started/install) instalado (Dart 3.13.3 o superior), un emulador o dispositivo conectado y la API de [dropx_web](https://github.com/deavilajuan/dropx_web) en ejecución con los datos de prueba cargados.
@@ -39,7 +41,9 @@ Al cambiar el `.env` hay que detener la app y ejecutar `flutter run` de nuevo (u
 
 **Recargar las guías:** la app no recibe avisos en tiempo real. Para ver las guías nuevas, se usa el botón de recargar (arriba a la derecha) o deslizar la lista hacia abajo.
 
-**Cambiar el estado de una guía:** en el detalle, los botones de abajo permiten marcarla como recogida o entregada, reportar una novedad o retomar la entrega.
+**Cambiar el estado de una guía:** en el detalle, los botones de abajo permiten marcarla como recogida o entregada, reportar una novedad o retomar la entrega. Al reportar una novedad se selecciona el motivo de una lista, y al entregar firma quien recibe en pantalla (la firma se ve en el detalle del paquete en la Suite web).
+
+**Ruta en Google Maps:** el botón del detalle abre Google Maps hacia el origen mientras la guía está pendiente por recoger, y hacia el destino cuando ya fue recogida. Usa la ubicación marcada en el mapa al crear el paquete en la Suite; si no tiene, busca por la dirección.
 
 **Si aparece un error de conexión:** el mensaje indica la dirección que usa la app; debe coincidir con la de la API y con el `.env`.
 
@@ -96,7 +100,8 @@ dropx_app/
 │   │   ├── pending_header.dart       # Encabezado de Pendientes (saludo, resumen y progreso)
 │   │   ├── refresh_button.dart       # Botón para recargar las guías
 │   │   ├── route_card.dart           # Tarjeta de ruta del detalle (con el botón del mapa)
-│   │   ├── status_actions.dart       # Botones para cambiar el estado de la guía
+│   │   ├── signature_dialog.dart     # Ventana para la firma de quien recibe
+│   │   ├── status_actions.dart       # Botones para cambiar el estado (motivo de novedad y firma)
 │   │   └── status_band.dart          # Banda de estado del detalle
 │   └── main.dart                     # Punto de entrada, MaterialApp y Providers
 ├── .env.example          # Modelo del .env (dirección de la API)

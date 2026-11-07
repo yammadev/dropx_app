@@ -49,6 +49,12 @@ class StatusBand extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                // Motivo de la novedad (si la guía tiene una)
+                if (package.issueReason != null)
+                  Text(
+                    package.issueReason!,
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white),
+                  ),
                 Text(
                   'Actualizada $_updatedLabel',
                   style: const TextStyle(fontSize: 12, color: Colors.white),

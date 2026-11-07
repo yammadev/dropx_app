@@ -11,7 +11,7 @@ import 'package_card.dart';
 class PackageList extends StatelessWidget {
   final List<PackageModel> packages;
   final String statusLabel; // estado en singular, ej: "recogida" (para el contador)
-  final bool showDateHeader; // true = muestra además la fecha y el filtro
+  final bool showDateHeader; // true = muestra además la fecha
   final Widget? header; // encabezado propio (ancho completo). Si se da, reemplaza al normal
 
   const PackageList({
@@ -63,32 +63,17 @@ class PackageList extends StatelessWidget {
     );
   }
 
-  // ---------- Encabezado normal: mensaje, fecha y filtro ----------
+  // ---------- Encabezado normal: mensaje y fecha ----------
   Widget _buildHeader() {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSummary(),
-              // Fecha (solo Recogidos y Entregados)
-              if (showDateHeader)
-                Text(
-                  _todayLabel,
-                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
-                ),
-            ],
-          ),
-        ),
-        // Botón de filtro (solo Recogidos y Entregados)
+        _buildSummary(),
+        // Fecha (solo Recogidos y Entregados)
         if (showDateHeader)
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            style: IconButton.styleFrom(backgroundColor: Colors.white),
-            onPressed: () {
-              // TO DO: Filtrar por fecha
-            },
+          Text(
+            _todayLabel,
+            style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
       ],
     );

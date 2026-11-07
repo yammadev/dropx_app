@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -74,7 +75,13 @@ class ApiService {
   }
 
   /// PATCH /api/packages/<id>/status. Cambia el estado y devuelve la guía actualizada.
-  Future<PackageModel> changeStatus(int packageId, PackageStatus status) async {
+  /// [reason] es el motivo de la novedad y [signature] la firma de quien recibe (PNG).
+  Future<PackageModel> changeStatus(
+    int packageId,
+    PackageStatus status, {
+    String? reason,
+    Uint8List? signature,
+  }) async {
     final token = await readToken();
     if (token == null) {
       throw const ApiException('La sesión no está iniciada.');
@@ -84,7 +91,11 @@ class ApiService {
       () => http.patch(
         Uri.parse('${ApiConfig.baseUrl}/api/packages/$packageId/status'),
         headers: {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'},
-        body: jsonEncode({'status': status.apiValue}),
+        body: jsonEncode({
+          'status': status.apiValue,
+          if (reason != null) 'reason': reason,
+          if (signature != null) 'signature': base64Encode(signature),
+        }),
       ),
     );
     return PackageModel.fromJson(data['package']);
