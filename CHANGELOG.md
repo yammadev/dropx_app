@@ -7,6 +7,10 @@ y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-11-07
+### Cambiado
+- Tamaño de las imágenes del README. 
+
 ## [1.2.0] - 2026-11-07
 ### Agregado
 - Botón de recargar las guías (arriba a la derecha) y recarga al deslizar la lista hacia abajo, porque la app no recibe avisos en tiempo real.
