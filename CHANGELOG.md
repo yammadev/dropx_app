@@ -7,6 +7,10 @@ y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-11-07
+### Cambiado
+- Tamaño de las imágenes del README. 
+
 ## [1.2.1] - 2026-11-07
 ### Cambiado
 - Tamaño de las imágenes del README. 

@@ -6,9 +6,9 @@ Aplicación móvil para repartidores del proyecto DropX (mensajería y logístic
 
 | Emulador | Loading | Login | Perfil |
 |---|---|---|---|
-| <img src="docs/screenshots/app-emulador.png" width="180" height="320"> | <img src="docs/screenshots/app-loading.png" width="180" height="320"> | <img src="docs/screenshots/app-login.png" width="180" height="320"> | <img src="docs/screenshots/app-perfil.png" width="180" height="320"> |
+| <img src="docs/screenshots/app-emulador.png" width="158" height="316"> | <img src="docs/screenshots/app-loading.png" width="158" height="316"> | <img src="docs/screenshots/app-login.png" width="158" height="316"> | <img src="docs/screenshots/app-perfil.png" width="158" height="316"> |
 | **Pendientes** | **Recogidos** | **Entregados** | **Paquete** |
-| <img src="docs/screenshots/app-pendientes.png" width="180" height="320"> | <img src="docs/screenshots/app-recogidos.png" width="180" height="320"> | <img src="docs/screenshots/app-entregados.png" width="180" height="320"> | <img src="docs/screenshots/app-paquete.png" width="180" height="320"> |
+| <img src="docs/screenshots/app-pendientes.png" width="158" height="316"> | <img src="docs/screenshots/app-recogidos.png" width="158" height="316"> | <img src="docs/screenshots/app-entregados.png" width="158" height="316"> | <img src="docs/screenshots/app-paquete.png" width="158" height="316"> |
 
 ## Ejecutar en modo de prueba
 **Requisitos:** [Flutter](https://docs.flutter.dev/get-started/install) instalado (Dart 3.13.3 o superior), un emulador o dispositivo conectado y la API de [dropx_web](https://github.com/deavilajuan/dropx_web) en ejecución con los datos de prueba cargados.
