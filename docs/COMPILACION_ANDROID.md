@@ -3,15 +3,15 @@
 ## Entorno de referencia
 
 La reparación se verifica con Flutter **3.50.0 stable** y su Dart **3.14.0**.
-Usa esa versión de Flutter para reproducir las dependencias de `pubspec.lock`;
-no ejecutes `flutter pub upgrade` como parte de la preparación.
+Se usa esa versión de Flutter para reproducir las dependencias de `pubspec.lock`;
+`flutter pub upgrade` no forma parte de la preparación.
 
 - Android SDK Platform **36**, Build Tools **36.0.0** y NDK **28.2.13676358**.
 - SDK Platform **35** y CMake **3.22.1**: algunas dependencias también los requieren.
   Gradle puede descargarlos si las licencias están aceptadas y hay acceso a Internet.
 - JDK **25.0.4**, incluido en Android Studio JBR, fue el utilizado en Windows.
   AGP requiere al menos JDK 17; los targets de compilación Java/Kotlin son 17.
-  Confirma el JDK efectivo con `flutter doctor -v`; no basta con `java -version`.
+  El JDK efectivo se confirma con `flutter doctor -v`; no basta con `java -version`.
 - Gradle Wrapper **9.3.1**, AGP **9.1.1** y KGP declarado **2.4.0**.
   No hace falta instalar Gradle globalmente: el wrapper descarga su distribución.
 - Dispositivo Android **7.0/API 24** o superior para probar el APK.
@@ -32,14 +32,14 @@ flutter doctor --android-licenses
 
 Al clonar `main` se incluyen los tres archivos del wrapper de Gradle.
 
-Crea `.env` en la raíz a partir del ejemplo versionado:
+Se crea `.env` en la raíz a partir del ejemplo versionado:
 
 ```sh
 cp .env.example .env
 ```
 
-Configura la URL del backend elegido y un timeout positivo. Para el backend publicado en Render
-(60 segundos, porque el servidor tarda cerca de un minuto en encender si estaba en reposo):
+En `.env` se configuran la URL del backend y un tiempo de espera positivo. Para el backend publicado
+en Render (60 segundos, porque el servidor tarda cerca de un minuto en encender si estaba en reposo):
 
 ```dotenv
 API_URL=https://dropx-web.onrender.com
@@ -48,10 +48,10 @@ API_TIMEOUT_SECONDS=60
 
 `.env.example` usa una dirección de emulador como ejemplo seguro. `.env` se ignora
 en Git, pero se empaqueta **dentro del APK**: solo debe contener configuración
-pública. No pongas contraseñas, tokens ni claves del backend en ese archivo.
+pública. Ese archivo no debe llevar contraseñas, tokens ni claves del backend.
 No es necesario generar una clave JWT para Flutter.
 
-Comprueba la exclusión sin mostrar su contenido:
+Para comprobar que Git lo excluye, sin mostrar su contenido:
 
 ```sh
 git check-ignore -v .env
@@ -60,7 +60,7 @@ git ls-files -- .env
 
 El segundo comando no debe devolver archivos.
 
-Instala las dependencias y verifica el código desde la raíz:
+Instalación de las dependencias y revisión del código, desde la raíz:
 
 ```sh
 flutter pub get
@@ -71,24 +71,25 @@ Con Flutter 3.50.0, el análisis de esta reparación encontró 22 observaciones
 informativas y ningún error ni warning de Dart. `flutter analyze` devolvió código
 1 por esas observaciones (incluyen la deprecación de `flutter/material.dart`).
 No se cambian pantallas ni imports de interfaz en este arreglo de compilación;
-la migración de UI debe revisarse por separado. No confundas ese resultado con
+la migración de UI debe revisarse por separado. Ese resultado no equivale a
 un análisis sin observaciones.
 
 `android/local.properties` es local y no se versiona. Flutter normalmente lo crea
 con las rutas del SDK de Android y Flutter. Si falta o contiene rutas antiguas,
-comprueba la instalación con `flutter doctor -v` y ejecuta `flutter pub get`.
+se comprueba la instalación con `flutter doctor -v` y se ejecuta `flutter pub get`.
 Para ejecutar Gradle directamente, ambas propiedades `sdk.dir` y `flutter.sdk`
 deben apuntar a instalaciones existentes en esa computadora.
 
-En PowerShell, si Java no está en PATH, configura solo la sesión; ajusta la ruta:
+En PowerShell, si Java no está en PATH, se configura solo para la sesión actual (con la ruta
+real de la instalación):
 
 ```powershell
 $env:JAVA_HOME = 'C:\Program Files\Android\Android Studio\jbr'
 .\android\gradlew.bat --version
 ```
 
-En macOS/Linux, si el permiso de ejecución no está disponible, usa
-`sh android/gradlew --version` o restaura el permiso con `chmod +x android/gradlew`.
+En macOS/Linux, si el permiso de ejecución no está disponible, se usa
+`sh android/gradlew --version` o se restaura el permiso con `chmod +x android/gradlew`.
 
 ## Generar e instalar el APK de prueba
 
@@ -111,12 +112,12 @@ adb devices
 adb install -r build/app/outputs/flutter-apk/app-release.apk
 ```
 
-Si hay varios dispositivos, añade `adb -s <serial>`. Si una aplicación previa usa
-otro certificado, `-r` no podrá actualizarla: decide cómo conservar sus datos antes
-de desinstalarla. Esta guía no ejecuta ni exige una desinstalación automática.
+Si hay varios dispositivos, se agrega `adb -s <serial>`. Si una aplicación previa usa
+otro certificado, `-r` no podrá actualizarla: hay que decidir cómo conservar sus datos
+antes de desinstalarla. Esta guía no ejecuta ni exige una desinstalación automática.
 
-Abre DropX, inicia sesión con una cuenta de pruebas de rol `courier` y verifica
-la lista de guías. Los cambios de estado deben probarse únicamente con guías
+Luego se abre DropX, se inicia sesión con una cuenta de pruebas de rol `courier` y se
+verifica la lista de guías. Los cambios de estado deben probarse únicamente con guías
 de prueba autorizadas. No se incluyen credenciales en el repositorio.
 
 ## Problemas encontrados y solución
@@ -140,10 +141,10 @@ reparación. La falta de Visual Studio solo afecta a compilar Windows.
 
 ## Verificación del artefacto
 
-Además del resultado de Gradle, comprueba que el APK exista, que `apksigner verify`
+Además del resultado de Gradle, se comprueba que el APK exista, que `apksigner verify`
 acepte su firma y que el ZIP contenga `assets/flutter_assets/.env`. Una compilación
-exitosa sin ese asset no completa la preparación de DropX. No extraigas ni imprimas
-su contenido en registros públicos. El tamaño del APK puede variar entre entornos.
+exitosa sin ese asset no completa la preparación de DropX. Su contenido no se
+extrae ni se imprime en registros públicos. El tamaño del APK puede variar entre entornos.
 
 Los resultados ejecutados para esta reparación se registran en la descripción del
 Pull Request, distinguiendo la compilación de las pruebas manuales en dispositivo.
