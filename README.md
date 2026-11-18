@@ -12,11 +12,16 @@ Aplicación móvil para repartidores del proyecto DropX (mensajería y logístic
 | **Navegación** | **Cambio de estado** | **Novedad** | **Entregado** |
 | <img src="docs/screenshots/app-navegar.png" width="158" height="316"> | <img src="docs/screenshots/app-recogida.png" width="158" height="316"> | <img src="docs/screenshots/app-novedad.png" width="158" height="316"> | <img src="docs/screenshots/app-entregado.png" width="158" height="316"> |
 
+## Compilar Android
+
+Consulta [la guía de compilación Android](docs/COMPILACION_ANDROID.md) para preparar
+Flutter 3.50.0, configurar los assets locales y generar e instalar el APK de prueba.
+
 ## Ejecutar en modo de prueba
 **Requisitos:** [Flutter](https://docs.flutter.dev/get-started/install) instalado (Dart 3.13.3 o superior), un emulador o dispositivo conectado y la API de [dropx_web](https://github.com/deavilajuan/dropx_web) en ejecución con los datos de prueba cargados.
 
 ```bash
-# Copiar .env y generar llave aleatoria
+# Copiar la configuración local de la API (no requiere generar claves)
 cp .env.example .env
 
 # Instalar requerimientos y encender

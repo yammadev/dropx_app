@@ -14,6 +14,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    androidResources {
+        // Keep the declared Flutter .env asset; Android's default ".*" filter removes it.
+        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:<dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.dropx_app"
