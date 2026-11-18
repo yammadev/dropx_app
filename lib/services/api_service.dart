@@ -120,7 +120,9 @@ class ApiService {
     } on ApiException {
       rethrow;
     } on TimeoutException {
-      throw ApiException('El servidor tardó demasiado en responder (${ApiConfig.baseUrl}).');
+      // En producción (Render, plan gratuito) el servidor se apaga si no se usa y tarda
+      // cerca de un minuto en encender: el segundo intento normalmente funciona.
+      throw const ApiException('El servidor tardó demasiado en responder. Si estaba en reposo, puede tardar hasta un minuto en iniciar: intente de nuevo.');
     } on SocketException {
       throw ApiException(_noConnection);
     } on http.ClientException {

@@ -6,6 +6,20 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
+### Agregado
+- Empaquetado automático con GitHub Actions: cada push a `main` crea un APK firmado y lo publica como versión nueva en GitHub Releases (el número de versión sube solo).
+- Firma de producción (release) con la llave definida en `android/key.properties`.
+- Guía de compilación Android (`docs/COMPILACION_ANDROID.md`) y wrapper de Gradle en el repositorio.
+
+### Cambiado
+- Compilación con Flutter 3.50.0: Android Gradle Plugin 9.1.1 y dependencias del `pubspec.lock` actualizadas.
+- Identificador de la app: `com.dropx.app` (antes `com.example.dropx_app`). La versión anterior se debe desinstalar antes de instalar la nueva.
+- La conexión por `http` (sin cifrar) solo se permite en desarrollo; la versión de producción usa `https`.
+- Mensaje de tiempo agotado más claro: indica que el servidor puede tardar hasta un minuto en iniciar.
+- El enlace "Olvidé mi contraseña" del login abre en el navegador la página de recuperación de la web (`/suite/recuperar`).
+
+### Corregido
+- El archivo `.env` no se incluía en el APK: Android excluye por defecto los archivos que empiezan con punto.
 
 ## [1.3.0] - 2026-11-07
 ### Agregado

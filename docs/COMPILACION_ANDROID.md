@@ -30,27 +30,20 @@ flutter doctor
 flutter doctor --android-licenses
 ```
 
-Con el PR integrado, clonar `main` incluye los tres archivos del wrapper.
-Para revisarlo antes de integrar, clona el fork del PR seleccionando su rama
-`fix/flutter-android-build`.
+Al clonar `main` se incluyen los tres archivos del wrapper de Gradle.
 
 Crea `.env` en la raíz a partir del ejemplo versionado:
 
 ```sh
-# Bash
 cp .env.example .env
 ```
 
-```powershell
-# PowerShell (alternativa al comando anterior)
-Copy-Item .env.example .env
-```
-
-Configura la URL del backend elegido y un timeout positivo. Para el backend público:
+Configura la URL del backend elegido y un timeout positivo. Para el backend publicado en Render
+(60 segundos, porque el servidor tarda cerca de un minuto en encender si estaba en reposo):
 
 ```dotenv
 API_URL=https://dropx-web.onrender.com
-API_TIMEOUT_SECONDS=15
+API_TIMEOUT_SECONDS=60
 ```
 
 `.env.example` usa una dirección de emulador como ejemplo seguro. `.env` se ignora
@@ -104,9 +97,11 @@ flutter build apk --release
 ```
 
 Salida: `build/app/outputs/flutter-apk/app-release.apk`.
-La configuración actual firma release con la **clave debug** y conserva
-`com.example.dropx_app`. Este APK sirve para pruebas internas; la publicación
-formal requiere una decisión separada sobre firma e identificador.
+Sin `android/key.properties`, el APK se firma con la **llave de desarrollo (debug)**.
+Sirve para pruebas en la computadora, pero no se instala encima de una versión
+descargada de Releases, que está firmada con la llave de producción. Las versiones
+oficiales (identificador `com.dropx.app`) las genera GitHub Actions: ver la sección
+*Producción* del README.
 
 Con un dispositivo conectado por USB y depuración USB autorizada:
 

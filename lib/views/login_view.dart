@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../core/api_config.dart';
 import '../core/app_theme.dart';
 import '../viewmodels/login_viewmodel.dart';
 import '../viewmodels/packages_viewmodel.dart';
@@ -48,6 +50,18 @@ class _LoginViewState extends State<LoginView> {
       context,
       MaterialPageRoute(builder: (_) => const HomeView()),
     );
+  }
+
+  // Abre en el navegador la página de recuperación de contraseña de la web (Suite),
+  // en el mismo servidor de la API (API_URL del .env).
+  Future<void> _openPasswordRecovery() async {
+    final url = Uri.parse('${ApiConfig.baseUrl}/suite/recuperar');
+    final opened = await launchUrl(url, mode: LaunchMode.externalApplication);
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No se pudo abrir la página de recuperación.')),
+      );
+    }
   }
 
   // Estilo reutilizable para los dos campos: fondo blanco, esquinas redondeadas,
@@ -167,11 +181,10 @@ class _LoginViewState extends State<LoginView> {
                 const SizedBox(height: 8),
 
                 // ----- Enlace "Olvidé mi contraseña" -----
+                // La recuperación se hace en la web: el enlace abre esa página en el navegador.
                 Center(
                   child: TextButton(
-                    onPressed: () {
-                      // TO DO: Recuperación de contraseña
-                    },
+                    onPressed: _openPasswordRecovery,
                     child: const Text('Olvidé mi contraseña', style: TextStyle(fontSize: 14)),
                   ),
                 ),

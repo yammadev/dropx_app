@@ -1,11 +1,21 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Datos de la llave con la que se firma la versión de producción (release).
+// En la computadora y en GitHub Actions están en android/key.properties (no se sube a GitHub).
+val keyProperties = Properties()
+val keyPropertiesFile = rootProject.file("key.properties")
+if (keyPropertiesFile.exists()) {
+    keyPropertiesFile.inputStream().use { keyProperties.load(it) }
+}
+
 android {
-    namespace = "com.example.dropx_app"
+    namespace = "com.dropx.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -15,13 +25,14 @@ android {
     }
 
     androidResources {
-        // Keep the declared Flutter .env asset; Android's default ".*" filter removes it.
+        // Android excluye por defecto los archivos que empiezan con punto (filtro ".*"):
+        // sin este ajuste el .env no entra en el APK. Se conservan las demás exclusiones.
         ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:<dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.dropx_app"
+        // Identificador único de la app en Android (no se debe cambiar después de publicarla)
+        applicationId = "com.dropx.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -34,11 +45,25 @@ android {
         versionName = flutter.versionName
     }
 
+    // Llave de producción: todas las versiones deben firmarse con la misma para que
+    // el celular acepte instalar una encima de la otra
+    signingConfigs {
+        create("release") {
+            keyAlias = keyProperties.getProperty("keyAlias")
+            keyPassword = keyProperties.getProperty("keyPassword")
+            storeFile = keyProperties.getProperty("storeFile")?.let { file(it) }
+            storePassword = keyProperties.getProperty("storePassword")
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Sin key.properties se usa la llave de desarrollo, para que "flutter run --release" funcione
+            signingConfig = if (keyPropertiesFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }

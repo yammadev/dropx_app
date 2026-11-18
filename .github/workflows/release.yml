@@ -1,0 +1,133 @@
+name: Versión de la app
+
+# Cada push a main empaqueta la app (APK firmado) y publica una versión nueva en GitHub Releases.
+# Los cambios que solo tocan documentación (README, CHANGELOG, capturas) no crean versión.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch: # botón "Run workflow" en la pestaña Actions, para lanzarla a mano
+
+# Una versión a la vez, para que dos pushes seguidos no tomen el mismo número
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write # necesario para crear la etiqueta (tag) y el Release
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # trae todo el historial y las etiquetas, para calcular la versión
+
+      # ---------- 1. Calcular el número de versión ----------
+      # Regla: la última versión publicada (etiqueta vX.Y.Z) + 1 en el patch.
+      # Si en pubspec.yaml se sube a mano el minor o el major (ej: 1.4.0), se publica esa.
+      - name: Calcular versión
+        id: version
+        run: |
+          # Versión de pubspec.yaml sin el número de build (1.3.0+4 -> 1.3.0)
+          base=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          # Última versión publicada (si no hay ninguna, la de pubspec.yaml)
+          last=$(git tag --list 'v*' --sort=-v:refname | head -n 1 | sed 's/^v//')
+          last=${last:-$base}
+
+          # La mayor de las dos decide: si pubspec.yaml es mayor, se usa tal cual
+          if [ "$(printf '%s\n%s\n' "$base" "$last" | sort -V | tail -n 1)" = "$base" ] && [ "$base" != "$last" ]; then
+            version=$base
+          else
+            IFS=. read -r major minor patch <<< "$last"
+            version="$major.$minor.$((patch + 1))"
+          fi
+
+          # Número de build para Android (versionCode): debe crecer siempre. 1.3.1 -> 1003001
+          IFS=. read -r major minor patch <<< "$version"
+          build=$((major * 1000000 + minor * 1000 + patch))
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+          echo "previous=$(git tag --list 'v*' --sort=-v:refname | head -n 1)" >> "$GITHUB_OUTPUT"
+          echo "Versión $version (build $build)"
+
+      # ---------- 2. Herramientas ----------
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      # Misma versión de Flutter de la guía docs/COMPILACION_ANDROID.md (y del pubspec.lock)
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.50.0'
+          channel: stable
+          cache: true
+
+      # ---------- 3. Configuración ----------
+      # .env de producción: la dirección de la API sale de la variable API_URL del repositorio.
+      # 60 segundos de espera, porque la API en Render Free tarda en despertar.
+      - name: Crear .env
+        env:
+          API_URL: ${{ vars.API_URL }}
+        run: |
+          if [ -z "$API_URL" ]; then
+            echo "::error::Falta la variable API_URL en el repositorio (Settings > Secrets and variables > Actions > Variables)"
+            exit 1
+          fi
+          printf 'API_URL=%s\nAPI_TIMEOUT_SECONDS=60\n' "$API_URL" > .env
+
+      # Llave de firma: el archivo .jks va en base64 en un secreto y se reconstruye aquí
+      - name: Preparar la llave de firma
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ] || [ -z "$KEY_PASSWORD" ]; then
+            echo "::error::Faltan los secretos de la llave de firma (ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD)"
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/upload-keystore.jks
+          {
+            echo "storeFile=upload-keystore.jks"
+            echo "storePassword=$KEYSTORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > android/key.properties
+
+      # ---------- 4. Empaquetar ----------
+      - run: flutter pub get
+      - name: Construir APK
+        run: |
+          flutter build apk --release \
+            --build-name=${{ steps.version.outputs.version }} \
+            --build-number=${{ steps.version.outputs.build }}
+          mv build/app/outputs/flutter-apk/app-release.apk dropx-${{ steps.version.outputs.version }}.apk
+
+      # ---------- 5. Publicar en GitHub Releases ----------
+      # Las notas son los títulos de los commits desde la versión anterior
+      - name: Crear Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          PREVIOUS: ${{ steps.version.outputs.previous }}
+        run: |
+          {
+            echo "## Cambios"
+            if [ -n "$PREVIOUS" ]; then
+              git log "$PREVIOUS..HEAD" --no-merges --format='- %s'
+            else
+              git log -1 --format='- %s'
+            fi
+            echo
+            echo "Para instalar: descargar \`dropx-$VERSION.apk\` en el celular y abrirlo."
+          } > notes.md
+          gh release create "v$VERSION" "dropx-$VERSION.apk" \
+            --target "$GITHUB_SHA" \
+            --title "DropX $VERSION" \
+            --notes-file notes.md

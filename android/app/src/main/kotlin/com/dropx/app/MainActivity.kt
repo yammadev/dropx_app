@@ -1,4 +1,4 @@
-package com.example.dropx_app
+package com.dropx.app
 
 import io.flutter.embedding.android.FlutterActivity
 
