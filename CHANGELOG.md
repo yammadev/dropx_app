@@ -6,6 +6,14 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 y este proyecto sigue el [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
+### Cambiado
+- La opción "Cambiar contraseña" del perfil abre en el navegador la página de la web para cambiarla (`/suite/cambiar-contrasena`).
+- Código repetido unificado: enlaces externos (`core/links.dart`), cajita "Urgente" (`widgets/urgent_badge.dart`), círculo con la inicial (`widgets/initial_avatar.dart`) y encabezado del token en `ApiService`.
+
+### Eliminado
+- Color `AppColors.border`, que no se usaba.
+
+## [1.3.1] - 2026-11-18
 ### Agregado
 - Empaquetado automático con GitHub Actions: cada push a `main` crea un APK firmado y lo publica como versión nueva en GitHub Releases (el número de versión sube solo).
 - Firma de producción (release) con la llave definida en `android/key.properties`.

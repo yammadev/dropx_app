@@ -4,7 +4,7 @@ import '../models/package_model.dart';
 import 'app_theme.dart';
 
 // Texto, icono y color de cada estado de guía.
-// Se usa en la banda del detalle y, más adelante, en las listas.
+// Se usa en la banda del detalle y en las tarjetas de la lista.
 extension PackageStatusStyle on PackageStatus {
   String get label => switch (this) {
         PackageStatus.pending => 'Pendiente',

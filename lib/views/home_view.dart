@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../models/package_model.dart';
-
 import '../viewmodels/packages_viewmodel.dart';
 import '../widgets/package_list.dart';
 import '../widgets/pending_header.dart';

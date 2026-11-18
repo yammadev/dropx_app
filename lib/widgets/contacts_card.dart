@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/app_theme.dart';
 import '../models/package_model.dart';
 import 'detail_card.dart';
+import 'initial_avatar.dart';
 
 // Tarjeta CONTACTOS del detalle: quien remite y quien recibe.
 class ContactsCard extends StatelessWidget {
@@ -27,23 +28,10 @@ class ContactsCard extends StatelessWidget {
 
   // Un contacto: inicial en círculo, etiqueta (REMITE / RECIBE), nombre, cédula y teléfono
   Widget _buildContact(String role, ContactModel contact) {
-    final initial = contact.name.isNotEmpty ? contact.name[0].toUpperCase() : '?';
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: AppColors.pillBackground,
-          child: Text(
-            initial,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary,
-            ),
-          ),
-        ),
+        InitialAvatar(name: contact.name, radius: 20, fontSize: 18),
         const SizedBox(width: 12),
         Expanded(
           child: Column(

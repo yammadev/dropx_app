@@ -60,16 +60,9 @@ class ApiService {
 
   /// GET /api/packages. Devuelve las guías asignadas al repartidor.
   Future<List<PackageModel>> getPackages() async {
-    final token = await readToken();
-    if (token == null) {
-      throw const ApiException('La sesión no está iniciada.');
-    }
-
+    final headers = await _authHeaders();
     final data = await _send(
-      () => http.get(
-        Uri.parse('${ApiConfig.baseUrl}/api/packages'),
-        headers: {'Authorization': 'Bearer $token'},
-      ),
+      () => http.get(Uri.parse('${ApiConfig.baseUrl}/api/packages'), headers: headers),
     );
     return (data['packages'] as List).map((item) => PackageModel.fromJson(item)).toList();
   }
@@ -82,15 +75,11 @@ class ApiService {
     String? reason,
     Uint8List? signature,
   }) async {
-    final token = await readToken();
-    if (token == null) {
-      throw const ApiException('La sesión no está iniciada.');
-    }
-
+    final headers = await _authHeaders();
     final data = await _send(
       () => http.patch(
         Uri.parse('${ApiConfig.baseUrl}/api/packages/$packageId/status'),
-        headers: {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'},
+        headers: {...headers, 'Content-Type': 'application/json'},
         body: jsonEncode({
           'status': status.apiValue,
           if (reason != null) 'reason': reason,
@@ -102,6 +91,15 @@ class ApiService {
   }
 
   // ---------- Ayuda interna ----------
+  // Encabezado con el token JWT para las peticiones que exigen sesión.
+  Future<Map<String, String>> _authHeaders() async {
+    final token = await readToken();
+    if (token == null) {
+      throw const ApiException('La sesión no está iniciada.');
+    }
+    return {'Authorization': 'Bearer $token'};
+  }
+
   // Mensaje cuando no se logra llegar al servidor; incluye la dirección usada para ayudar a corregirla.
   String get _noConnection =>
       'No hay conexión con el servidor (${ApiConfig.baseUrl}). Verifique que la API esté en ejecución y que API_URL en el archivo .env sea correcta.';

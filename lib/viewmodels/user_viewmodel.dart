@@ -9,7 +9,8 @@ class UserViewModel extends ChangeNotifier {
 
   // ---------- Estado ----------
   // Vacío hasta que se inicia sesión (lo llena el login con los datos de la API).
-  UserModel _user = const UserModel(name: '', email: '', role: 'courier');
+  static const _emptyUser = UserModel(name: '', email: '', role: 'courier');
+  UserModel _user = _emptyUser;
 
   // Getter: la vista lee el usuario, pero no puede modificarlo
   UserModel get user => _user;
@@ -24,7 +25,7 @@ class UserViewModel extends ChangeNotifier {
   /// Cierra la sesión del repartidor: borra el token y los datos del usuario.
   Future<void> logout() async {
     await _api.clearToken();
-    _user = const UserModel(name: '', email: '', role: 'courier');
+    _user = _emptyUser;
     notifyListeners();
   }
 }

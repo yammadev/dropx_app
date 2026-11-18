@@ -7,7 +7,6 @@ class AppColors {
 
   static const primary = Color(0xFFFF6600);     // Naranja principal
   static const textPrimary = Color(0xFF1C1B1F); // Texto principal
-  static const border = Color(0xFF79747E);      // Borde de los campos
   static const outlineVariant = Color(0xFFCAC4D0);    // Borde suave de las tarjetas (Material 3)
   static const error = Color(0xFFE53935);       // Mensajes de error
   static const info = Color(0xFF1E88E5);        // Estado: recogido

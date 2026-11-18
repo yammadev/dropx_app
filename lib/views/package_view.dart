@@ -6,6 +6,7 @@ import '../widgets/contacts_card.dart';
 import '../widgets/route_card.dart';
 import '../widgets/status_actions.dart';
 import '../widgets/status_band.dart';
+import '../widgets/urgent_badge.dart';
 
 // Pantalla de detalle de una guía (solo información básica).
 // Arma las piezas: encabezado naranja, banda de estado, tarjeta de ruta y de contactos.
@@ -38,29 +39,7 @@ class PackageView extends StatelessWidget {
                 ),
               ),
               // Cajita roja "Urgente" a la derecha (igual a la de las tarjetas)
-              if (package.isUrgent)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.error,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.warning_amber_rounded, size: 14, color: Colors.white),
-                      SizedBox(width: 4),
-                      Text(
-                        'Urgente',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              if (package.isUrgent) const UrgentBadge(),
             ],
           ),
         ],

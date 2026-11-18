@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/app_theme.dart';
+import '../core/links.dart';
 import '../viewmodels/packages_viewmodel.dart';
 import '../viewmodels/user_viewmodel.dart';
+import '../widgets/initial_avatar.dart';
 import 'login_view.dart';
 
 // Pestaña de perfil: datos del repartidor y sus opciones.
@@ -35,25 +37,13 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     // Escucha el UserViewModel: si cambia el usuario, la pantalla se redibuja
     final user = context.watch<UserViewModel>().user;
-    final initial = user.name.isNotEmpty ? user.name[0].toUpperCase() : '?';
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
       children: [
         // ---------- Avatar, nombre y correo ----------
         Center(
-          child: CircleAvatar(
-            radius: 48,
-            backgroundColor: AppColors.pillBackground,
-            child: Text(
-              initial,
-              style: const TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.w600,
-                color: AppColors.primary,
-              ),
-            ),
-          ),
+          child: InitialAvatar(name: user.name, radius: 48, fontSize: 40, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 16),
         Text(
@@ -69,13 +59,16 @@ class ProfileView extends StatelessWidget {
         const SizedBox(height: 32),
 
         // ---------- Opción: cambiar contraseña ----------
+        // Se hace en la web: abre en el navegador la página de cambio de contraseña de la Suite.
         _buildOption(
           icon: Icons.lock_outline,
           label: 'Cambiar contraseña',
           showChevron: true,
-          onTap: () {
-            // TO DO: Abrir la pantalla para cambiar la contraseña
-          },
+          onTap: () => Links.open(
+            context,
+            Links.suite('cambiar-contrasena'),
+            'No se pudo abrir la página para cambiar la contraseña.',
+          ),
         ),
         const SizedBox(height: 10),
 

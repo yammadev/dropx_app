@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../core/app_theme.dart';
+import '../core/links.dart';
 import '../models/package_model.dart';
 import 'detail_card.dart';
 
@@ -27,10 +27,7 @@ class RouteCard extends StatelessWidget {
       'destination': destination,
       'travelmode': 'driving',
     });
-    final opened = await launchUrl(url, mode: LaunchMode.externalApplication);
-    if (!opened && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo abrir Google Maps.')));
-    }
+    await Links.open(context, url, 'No se pudo abrir Google Maps.');
   }
 
   // Una parada de la ruta: icono en círculo, etiqueta (ORIGEN / DESTINO) y dirección

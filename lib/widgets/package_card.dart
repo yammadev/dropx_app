@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/app_theme.dart';
 import '../core/package_status_style.dart';
 import '../models/package_model.dart';
+import 'urgent_badge.dart';
 
 // Tarjeta de una guía dentro de las listas (estilo "outlined card" de Material 3).
 // Muestra: número de guía con su estado, la ruta (origen -> destino) y cajitas con
@@ -59,28 +60,6 @@ class PackageCard extends StatelessWidget {
           Text(
             status.label,
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Cajita roja "Urgente" (solo para guías urgentes)
-  Widget _buildUrgentBox() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.error,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: const Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.warning_amber_rounded, size: 14, color: Colors.white),
-          SizedBox(width: 4),
-          Text(
-            'Urgente',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
           ),
         ],
       ),
@@ -182,7 +161,7 @@ class PackageCard extends StatelessWidget {
                 spacing: 8,
                 runSpacing: 6, // si no caben en una línea, pasan a la siguiente
                 children: [
-                  if (isUrgent) _buildUrgentBox(),
+                  if (isUrgent) const UrgentBadge(),
                   _buildInfoBox(Icons.scale_outlined, '${package.weightKg.toStringAsFixed(1)} kg', isUrgent),
                   _buildInfoBox(Icons.route_outlined, '${package.distanceKm.toStringAsFixed(1)} km', isUrgent),
                 ],

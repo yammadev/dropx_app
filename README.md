@@ -134,6 +134,7 @@ dropx_app/
 │   ├── core/
 │   │   ├── api_config.dart           # Dirección de la API y tiempo de espera
 │   │   ├── app_theme.dart            # Colores de la marca y tema global
+│   │   ├── links.dart                # Abre páginas de la web (Suite) y Google Maps
 │   │   └── package_status_style.dart # Texto, icono y color de cada estado de guía
 │   ├── models/
 │   │   ├── package_model.dart        # Modelo de guía, su estado y contactos
@@ -152,6 +153,7 @@ dropx_app/
 │   ├── widgets/
 │   │   ├── contacts_card.dart        # Tarjeta de contactos del detalle
 │   │   ├── detail_card.dart          # Tarjeta con título para las secciones del detalle
+│   │   ├── initial_avatar.dart       # Círculo con la inicial del nombre (perfil y contactos)
 │   │   ├── package_card.dart         # Tarjeta de una guía
 │   │   ├── package_list.dart         # Lista de guías reutilizable
 │   │   ├── pending_header.dart       # Encabezado de Pendientes (saludo, resumen y progreso)
@@ -159,7 +161,8 @@ dropx_app/
 │   │   ├── route_card.dart           # Tarjeta de ruta del detalle (con el botón del mapa)
 │   │   ├── signature_dialog.dart     # Ventana para la firma de quien recibe
 │   │   ├── status_actions.dart       # Botones para cambiar el estado (motivo de novedad y firma)
-│   │   └── status_band.dart          # Banda de estado del detalle
+│   │   ├── status_band.dart          # Banda de estado del detalle
+│   │   └── urgent_badge.dart         # Cajita roja "Urgente" (tarjeta y detalle)
 │   └── main.dart                     # Punto de entrada, MaterialApp y Providers
 ├── .env.example          # Modelo del .env (dirección de la API)
 ├── CHANGELOG.md          # Historial de cambios
